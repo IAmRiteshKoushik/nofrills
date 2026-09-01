@@ -1,5 +1,18 @@
 # Plugin Research Documentation
 
+## Table of contents
+
+| Category | Plugins |
+|---|---|
+| Authentication | [Two Factor](#two-factor-authentication), [Magic Link](#magic-link-plugin-authentication), [Email OTP](#email-otp-plugin-authentication), [Passkey](#passkey-plugin-authentication), [Phone Number](#phone-number-plugin-authentication), [Anonymous](#anonymous-plugin-authentication), [Username](#username-plugin-authentication), [One Tap](#one-tap-plugin-authentication), [Sign In With Ethereum](#sign-in-with-ethereum-plugin-authentication), [Generic OAuth](#generic-oauth-plugin-authentication), [Last Login Method](#last-login-method-plugin-utility), [Multi-Session](#multi-session-plugin-utility) |
+| Authorization and management | [Admin](#admin-plugin-authorization), [Organization](#organization-plugin-authorization), [SSO](#sso-plugin-authorization-and-management), [SCIM](#scim-plugin-authorization-and-management) |
+| API and tokens | [Agent Auth](#agent-auth-plugin-authorization), [API Key](#api-key-plugin-api-and-tokens), [JWT](#jwt-plugin-api-and-tokens), [Bearer](#bearer-plugin-api-and-tokens), [One-Time Token](#one-time-token-plugin-api-and-tokens), [OAuth Proxy](#oauth-proxy-plugin-api-and-tokens) |
+| OAuth and OIDC providers | [OAuth 2.1 Provider](#oauth-21-provider-plugin-oauth-and-oidc-providers), [MCP](#mcp-auth-plugin-authorization), [Device Authorization](#device-authorization-plugin-oauth-and-oidc-providers) |
+| Security and utilities | [Captcha](#captcha-plugin-utility), [Have I Been Pwned](#have-i-been-pwned-plugin-security-and-utilities), [i18n](#i18n-plugin-security-and-utilities), [Open API](#open-api-plugin-security-and-utilities), [Test Utils](#test-utils-plugin-security-and-utilities), [DBSC Toolkit](#dbsc-toolkit-security) |
+| Analytics and tracking | [Dub](#dub-plugin-analytics-and-tracking) |
+| Payments | [Stripe](#stripe-plugin-payments), [PayU](#payu-plugin-payments) |
+| Community | [Invite](#invite-community), [Referral](#referral-community), [Inbox](#inbox-community), [Email Challenge](#email-challenge-community) |
+
 ## Two Factor (authentication)
 
 The Two-Factor plugin was configured for TOTP and generated
@@ -57,6 +70,34 @@ Neither migration has been applied.
 The generated migration also adds indexes on `passkey.user_id` and
 `passkey.credential_id`.
 
+## Phone Number Plugin (authentication)
+
+The Phone Number plugin has not been configured or schema-inspected in this
+project.
+
+## Anonymous Plugin (authentication)
+
+The Anonymous plugin has not been configured or schema-inspected in this
+project.
+
+## Username Plugin (authentication)
+
+The Username plugin has not been configured or schema-inspected in this project.
+
+## One Tap Plugin (authentication)
+
+The One Tap plugin has not been configured or schema-inspected in this project.
+
+## Sign In With Ethereum Plugin (authentication)
+
+The Sign In With Ethereum plugin has not been configured or schema-inspected in
+this project.
+
+## Generic OAuth Plugin (authentication)
+
+The Generic OAuth plugin has not been configured or schema-inspected in this
+project.
+
 ## Admin Plugin (authorization)
 
 | Table | New column | Type | Default | Purpose |
@@ -83,9 +124,54 @@ Neither migration has been applied.
 The migration also adds foreign keys from memberships and invitations to their
 organization and users, plus indexes for organization and user lookups.
 
+## SSO Plugin (authorization and management)
+
+The SSO plugin has not been configured or schema-inspected in this project.
+
+## SCIM Plugin (authorization and management)
+
+The SCIM plugin has not been configured or schema-inspected in this project.
+
 ## Agent Auth Plugin (authorization)
 
+The Agent Auth plugin has not been configured or schema-inspected in this
+project.
+
+## API Key Plugin (API and tokens)
+
+The API Key plugin has not been configured or schema-inspected in this project.
+
+## JWT Plugin (API and tokens)
+
+The JWT plugin has not been configured or schema-inspected in this project.
+
+## Bearer Plugin (API and tokens)
+
+The Bearer plugin has not been configured or schema-inspected in this project.
+
+## One-Time Token Plugin (API and tokens)
+
+The One-Time Token plugin has not been configured or schema-inspected in this
+project.
+
+## OAuth Proxy Plugin (API and tokens)
+
+The OAuth Proxy plugin has not been configured or schema-inspected in this
+project.
+
+## OAuth 2.1 Provider Plugin (OAuth and OIDC providers)
+
+The OAuth 2.1 Provider plugin has not been configured or schema-inspected in
+this project.
+
 ## MCP Auth Plugin (authorization)
+
+The MCP plugin has not been configured or schema-inspected in this project.
+
+## Device Authorization Plugin (OAuth and OIDC providers)
+
+The Device Authorization plugin has not been configured or schema-inspected in
+this project.
 
 ## Captcha Plugin (utility)
 
@@ -104,6 +190,28 @@ is applied.
 
 The Multi-Session plugin was configured and then removed. It stores multiple
 active sessions in browser cookies and generated no table, field, or migration.
+
+## Have I Been Pwned Plugin (security and utilities)
+
+The Have I Been Pwned plugin has not been configured or schema-inspected in this
+project.
+
+## i18n Plugin (security and utilities)
+
+The i18n plugin has not been configured or schema-inspected in this project.
+
+## Open API Plugin (security and utilities)
+
+The Open API plugin has not been configured or schema-inspected in this project.
+
+## Test Utils Plugin (security and utilities)
+
+The Test Utils plugin has not been configured or schema-inspected in this
+project.
+
+## Dub Plugin (analytics and tracking)
+
+The Dub plugin has not been configured or schema-inspected in this project.
 
 ## Stripe Plugin (payments)
 
