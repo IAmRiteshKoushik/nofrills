@@ -274,12 +274,17 @@ and resource indexes.
 ## MCP Auth Plugin (authorization)
 
 The MCP plugin was configured with JWT and a non-routable protected resource.
-Schema generation failed before output because the Drizzle adapter requires the
-OAuth Provider models already present in the schema object, including
-`oauthResource`. Retrying without the adapter schema produced the same error.
-The temporary MCP configuration was removed and no migration was generated or
-applied. Better Auth documents that MCP uses the OAuth Provider schema shown
-above.
+Direct generation initially failed because the Drizzle adapter schema did not
+yet contain the OAuth Provider models, including `oauthResource`. After first
+generating the OAuth Provider schema, MCP generated
+`drizzle/0033_sticky_vivisector.sql`. It adds the same eight tables shown in the
+OAuth 2.1 Provider section above: `jwks`, `oauth_access_token`, `oauth_client`,
+`oauth_client_assertion`, `oauth_client_resource`, `oauth_consent`,
+`oauth_refresh_token`, and `oauth_resource`.
+
+The temporary MCP and JWT configuration was then removed. The rollback migration
+`drizzle/0034_eminent_post.sql` drops those eight tables. Neither migration has
+been applied.
 
 ## Device Authorization Plugin (OAuth and OIDC providers)
 
@@ -340,14 +345,129 @@ integration package is `@dub/better-auth`; it is not published as
 
 ## Stripe Plugin (payments)
 
+The official `@better-auth/stripe` plugin was configured with subscriptions
+enabled, an inert Stripe test client, and placeholder plan and webhook values.
+It generated `drizzle/0035_nice_aaron_stack.sql`, then was removed. The rollback
+migration `drizzle/0036_grey_blackheart.sql` was generated. Neither migration
+has been applied, and no Stripe API request was made.
+
+| Table | Field | Type | Default | Purpose |
+|---|---|---|---|---|
+| `user` | `stripe_customer_id` | `text` | none | Optional Stripe customer associated with a user. |
+| `subscription` | `id` | `text` | none | Primary key. |
+| `subscription` | `plan`, `reference_id` | `text` | none | Identifies the plan and user or organization that owns it. |
+| `subscription` | `stripe_customer_id`, `stripe_subscription_id`, `stripe_schedule_id` | `text` | none | Optional Stripe identifiers. |
+| `subscription` | `status` | `text` | `incomplete` | Stores the subscription lifecycle state. |
+| `subscription` | `period_start`, `period_end`, `trial_start`, `trial_end`, `cancel_at`, `canceled_at`, `ended_at` | `timestamp` | none | Stores billing, trial, cancellation, and ending times. |
+| `subscription` | `cancel_at_period_end` | `boolean` | `false` | Schedules cancellation at the end of the current period. |
+| `subscription` | `seats` | `integer` | none | Optional subscription seat count. |
+| `subscription` | `billing_interval` | `text` | none | Optional billing interval. |
+
 ## PayU Plugin (payments)
+
+The Better Auth community catalog currently links to `better-auth-payu`. The
+published `better-auth-payu@0.1.0` package was installed and configured with
+placeholder merchant, endpoint, and subscription values, but Better Auth could
+not load it: its package exports reference `dist/index.mjs`, while the published
+package contains no `dist` files. Schema generation therefore stopped before
+output. The temporary configuration was removed; no schema or migration was
+generated or applied.
 
 ## Invite (community)
 
+The catalogued `better-invite@0.5.7` plugin generated
+`drizzle/0037_low_psylocke.sql`, then was removed. The rollback migration
+`drizzle/0038_rare_daimon_hellstrom.sql` was generated. Neither migration has
+been applied.
+
+| Table | Field | Type | Default | Purpose |
+|---|---|---|---|---|
+| `invite` | `id`, `token` | `text` | none | Primary key and unique invitation token. |
+| `invite` | `created_at`, `expires_at` | `timestamp` | none | Creation and expiry times. |
+| `invite` | `max_uses` | `integer` | none | Maximum accepted uses. |
+| `invite` | `infinity_max_uses` | `boolean` | `false` | Marks an invitation as having unlimited uses. |
+| `invite` | `created_by_user_id` | `text` | none | References the user who created the invitation. |
+| `invite` | `redirect_to_after_upgrade`, `email`, `role`, `status` | `text` | none | Stores redirect, recipient, granted role, and lifecycle state. |
+| `invite` | `emails` | `text[]` | none | Optional recipient email list. |
+| `invite` | `share_inviter_name`, `new_account` | `boolean` | none | Controls inviter disclosure and records whether a new account is expected. |
+| `invite_use` | `id`, `invite_id`, `used_by_user_id` | `text` | none | Identifies a use and links it to the invitation and optional user. |
+| `invite_use` | `used_at` | `timestamp` | none | Records when the invitation was used. |
+
+The migration adds foreign keys from `invite.created_by_user_id` and
+`invite_use.used_by_user_id` to `user`, and from `invite_use.invite_id` to
+`invite`.
+
 ## Referral (community)
+
+The catalogued `@marinedotsh/better-auth-referral@0.3.0` plugin generated
+`drizzle/0039_fancy_darwin.sql`, then was removed. The rollback migration
+`drizzle/0040_tan_raider.sql` was generated. Neither migration has been applied.
+
+| Table | Field | Type | Default | Purpose |
+|---|---|---|---|---|
+| `referral_code` | `id`, `user_id`, `code` | `text` | none | Stores a unique code for one user. |
+| `referral_code` | `created_at` | `timestamp` | `now()` | Records code creation. |
+| `referrals` | `id`, `referrer_user_id`, `referred_user_id`, `referral_code_id` | `text` | none | Links the referrer, referred user, and code. |
+| `referrals` | `status` | `text` | `completed` | Stores referral state. |
+| `referrals` | `completed_at`, `created_at` | `timestamp` | none / `now()` | Stores completion and creation times. |
+| `referral_step_completion` | `id`, `referral_id`, `step`, `completion_key` | `text` | none | Records an idempotent completed referral step. |
+| `referral_step_completion` | `metadata` | `jsonb` | none | Optional step audit metadata. |
+| `referral_step_completion` | `completed_at` | `timestamp` | `now()` | Records step completion time. |
+
+The generated Drizzle schema emitted the reverse referred-user relation as
+`one(...)` without local fields, which made the schema unloadable. That
+generator output was temporarily corrected to `many(...)` only long enough for
+Better Auth to regenerate the plugin-free schema and produce the rollback.
 
 ## Inbox (community)
 
+The catalogued `better-inbox@0.2.0` plugin generated
+`drizzle/0041_silky_king_bedlam.sql`, then was removed. The rollback migration
+`drizzle/0042_flimsy_senator_kelly.sql` was generated. Neither migration has
+been applied.
+
+| Table | Field | Type | Default | Purpose |
+|---|---|---|---|---|
+| `notification` | `id`, `user_id` | `text` | none | Primary key and owning user reference. |
+| `notification` | `organization_id`, `type`, `title`, `body`, `href` | `text` | none | Stores optional organization scope and notification content. |
+| `notification` | `data` | `jsonb` | none | Optional structured payload. |
+| `notification` | `read` | `boolean` | `false` | Tracks whether the user has read the notification. |
+| `notification` | `created_at` | `timestamp` | none | Records notification creation. |
+
+The migration adds a cascading foreign key from `notification.user_id` to
+`user.id`.
+
 ## Email Challenge (community)
 
+The catalogued `better-auth-email-challenge@0.1.5` plugin was configured with a
+no-op email callback for schema inspection. It generated
+`drizzle/0043_hot_wendell_rand.sql`, then was removed. The rollback migration
+`drizzle/0044_yummy_amazoness.sql` was generated. Neither migration has been
+applied, and no email was sent.
+
+| Table | Field | Type | Default | Purpose |
+|---|---|---|---|---|
+| `email_challenge` | `id`, `email` | `text` | none | Identifies the challenge and target email. |
+| `email_challenge` | `hashed_approval_token`, `hashed_otp`, `browser_binding_hash` | `text` | none | Stores hashed proof and browser-binding material. The approval-token hash is unique. |
+| `email_challenge` | `status` | `text` | none | Stores the challenge lifecycle state. |
+| `email_challenge` | `attempts` | `integer` | `0` | Counts verification attempts. |
+| `email_challenge` | `name`, `callback_url`, `ip_address`, `user_agent` | `text` | none | Optional identity, redirect, and request context. |
+| `email_challenge` | `expires_at`, `approved_at`, `consumed_at`, `created_at`, `updated_at` | `timestamp` | none | Stores challenge lifecycle timestamps. |
+
 ## DBSC Toolkit (security)
+
+The catalogued `@dbsc-toolkit/better-auth@1.2.2` plugin, with
+`dbsc-toolkit@2.14.1`, generated
+`drizzle/0045_watery_black_tarantula.sql`, then was removed. The rollback
+migration `drizzle/0046_crazy_ikaris.sql` was generated. Neither migration has
+been applied.
+
+| Table | Field | Type | Default | Purpose |
+|---|---|---|---|---|
+| `dbsc_session` | `id`, `user_id`, `tier` | `text` | none | Identifies a device-bound session, its user, and binding tier. |
+| `dbsc_session` | `created_at`, `expires_at`, `last_refresh_at` | `integer` | none | Stores session lifecycle times as integer timestamps. |
+| `dbsc_bound_key` | `id`, `session_id`, `kind`, `jwk`, `algorithm` | `text` | none | Stores a native or polyfill public key and its algorithm for a DBSC session. |
+| `dbsc_bound_key` | `created_at` | `integer` | none | Stores key creation time. |
+
+The migration adds cascading foreign keys from `dbsc_session.user_id` to
+`user.id` and from `dbsc_bound_key.session_id` to `dbsc_session.id`.
