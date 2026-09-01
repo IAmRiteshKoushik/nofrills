@@ -72,31 +72,56 @@ The generated migration also adds indexes on `passkey.user_id` and
 
 ## Phone Number Plugin (authentication)
 
-The Phone Number plugin has not been configured or schema-inspected in this
-project.
+The Phone Number plugin generated `drizzle/0011_steep_sandman.sql`, then was
+removed. The rollback migration `drizzle/0012_even_nick_fury.sql` was generated.
+Neither migration has been applied.
+
+| Table | Generated fields |
+|---|---|
+| `user` | Nullable `phone_number` (`text`, unique) and `phone_number_verified` (`boolean`) |
 
 ## Anonymous Plugin (authentication)
 
-The Anonymous plugin has not been configured or schema-inspected in this
-project.
+The Anonymous plugin generated `drizzle/0013_handy_blonde_phantom.sql`, then
+was removed. The rollback migration `drizzle/0014_sharp_harrier.sql` was
+generated. Neither migration has been applied.
+
+| Table | Generated fields |
+|---|---|
+| `user` | `is_anonymous` (`boolean`, default `false`) |
 
 ## Username Plugin (authentication)
 
-The Username plugin has not been configured or schema-inspected in this project.
+The Username plugin generated `drizzle/0015_graceful_calypso.sql`, then was
+removed. The rollback migration `drizzle/0016_concerned_famine.sql` was
+generated. Neither migration has been applied.
+
+| Table | Generated fields |
+|---|---|
+| `user` | Nullable `username` (`text`, unique) and `display_username` (`text`) |
 
 ## One Tap Plugin (authentication)
 
-The One Tap plugin has not been configured or schema-inspected in this project.
+The One Tap plugin was configured for schema inspection, then removed. It
+generated no table, field, or migration.
 
 ## Sign In With Ethereum Plugin (authentication)
 
-The Sign In With Ethereum plugin has not been configured or schema-inspected in
-this project.
+The Sign In With Ethereum plugin generated `drizzle/0017_perfect_reptil.sql`,
+then was removed. The rollback migration `drizzle/0018_crazy_butterfly.sql` was
+generated. Neither migration has been applied.
+
+| Table | Generated fields |
+|---|---|
+| `wallet_address` | `id`, `user_id`, `address`, `chain_id`, `is_primary` (default `false`), `created_at` |
+
+The generated migration adds a foreign key to `user.id` and an index on
+`wallet_address.user_id`.
 
 ## Generic OAuth Plugin (authentication)
 
-The Generic OAuth plugin has not been configured or schema-inspected in this
-project.
+The Generic OAuth plugin was configured with non-routable inspection endpoints,
+then removed. It generated no table, field, or migration.
 
 ## Admin Plugin (authorization)
 
@@ -126,52 +151,134 @@ organization and users, plus indexes for organization and user lookups.
 
 ## SSO Plugin (authorization and management)
 
-The SSO plugin has not been configured or schema-inspected in this project.
+The SSO plugin generated `drizzle/0019_magical_jamie_braddock.sql`, then was
+removed. The rollback migration `drizzle/0020_acoustic_darkhawk.sql` was
+generated. Neither migration has been applied.
+
+| Table | Generated fields |
+|---|---|
+| `sso_provider` | `id`, `issuer`, `oidc_config`, `saml_config`, `user_id`, `provider_id` (unique), `organization_id`, `domain` |
+
+The generated migration adds a foreign key to `user.id`.
 
 ## SCIM Plugin (authorization and management)
 
-The SCIM plugin has not been configured or schema-inspected in this project.
+The SCIM plugin required Drizzle native transaction support during its temporary
+configuration. It generated `drizzle/0021_lowly_roxanne_simpson.sql`, then was
+removed together with that temporary adapter setting. The rollback migration
+`drizzle/0022_amazing_mantis.sql` was generated. Neither migration has been
+applied.
+
+| Table | Generated fields |
+|---|---|
+| `scim_connection_binding` | Connection identity, provisioning domain, decommission state, cursors, counters, and lease fields |
+| `scim_group` | Connection and domain IDs, revision, display and external identity keys, ordering, and timestamps |
+| `scim_group_member` | Connection, group, SCIM user, membership key, and timestamp |
+| `scim_identity_tombstone` | Connection/domain IDs, external identity, linked user, serialized profile, and deletion time |
+| `scim_projection_grant` | Connection/domain, SCIM user, Better Auth user, source, role, grant key, and timestamps |
+| `scim_subject` | Better Auth user ID, profile source ID, revision, and timestamps |
+| `scim_user` | Connection/domain, Better Auth user, SCIM identity/profile, emails, names, attributes, lifecycle state, and timestamps |
+
+The migration adds the documented foreign keys and lookup indexes for the SCIM
+resources.
 
 ## Agent Auth Plugin (authorization)
 
-The Agent Auth plugin has not been configured or schema-inspected in this
-project.
+The Agent Auth plugin generated `drizzle/0029_fancy_red_skull.sql`, then was
+removed. The rollback migration `drizzle/0030_blue_psynapse.sql` was generated.
+Neither migration has been applied. The registry's compatible package release is
+currently `@better-auth/agent-auth` `0.6.2`, despite the main Better Auth release
+being `1.7.2`.
+
+| Table | Generated fields |
+|---|---|
+| `agent` | Identity, host and optional user links, status/mode, keys, lifecycle times, metadata, and timestamps |
+| `agent_capability_grant` | Agent, capability, grant/deny users, status, constraints, expiry, and timestamps |
+| `agent_host` | Host identity, optional user link, default capabilities, keys, enrollment token state, lifecycle times, and timestamps |
+| `approval_request` | Agent/host/user links, approval method and state, capabilities, device/CIBA values, polling state, expiry, and timestamps |
+
+The migration adds foreign keys to the related agent, host, and user records, as
+well as lifecycle and lookup indexes.
 
 ## API Key Plugin (API and tokens)
 
-The API Key plugin has not been configured or schema-inspected in this project.
+The API Key plugin generated `drizzle/0023_groovy_kingpin.sql`, then was
+removed. The rollback migration `drizzle/0024_sleepy_crusher_hogan.sql` was
+generated. Neither migration has been applied.
+
+| Table | Generated fields |
+|---|---|
+| `apikey` | Key/configuration identity, owner reference, key material and prefix, refill/rate-limit state, expiry, timestamps, permissions, and metadata |
+
+The migration adds indexes on `config_id`, `reference_id`, and `key`.
 
 ## JWT Plugin (API and tokens)
 
-The JWT plugin has not been configured or schema-inspected in this project.
+The JWT plugin generated `drizzle/0025_tan_silver_fox.sql`, then was removed.
+The rollback migration `drizzle/0026_familiar_excalibur.sql` was generated.
+Neither migration has been applied.
+
+| Table | Generated fields |
+|---|---|
+| `jwks` | `id`, public/private keys, `created_at`, `expires_at`, `alg`, and `crv` |
 
 ## Bearer Plugin (API and tokens)
 
-The Bearer plugin has not been configured or schema-inspected in this project.
+The Bearer plugin was configured with One-Time Token and OAuth Proxy for schema
+inspection, then removed. It generated no table, field, or migration.
 
 ## One-Time Token Plugin (API and tokens)
 
-The One-Time Token plugin has not been configured or schema-inspected in this
-project.
+The One-Time Token plugin was configured with Bearer and OAuth Proxy for schema
+inspection, then removed. It generated no table, field, or migration.
 
 ## OAuth Proxy Plugin (API and tokens)
 
-The OAuth Proxy plugin has not been configured or schema-inspected in this
-project.
+The OAuth Proxy plugin was configured with Bearer and One-Time Token for schema
+inspection, then removed. It generated no table, field, or migration.
 
 ## OAuth 2.1 Provider Plugin (OAuth and OIDC providers)
 
-The OAuth 2.1 Provider plugin has not been configured or schema-inspected in
-this project.
+The OAuth 2.1 Provider plugin was configured with the required JWT plugin. It
+generated `drizzle/0031_loving_tyger_tiger.sql`, then was removed. The rollback
+migration `drizzle/0032_first_ma_gnuci.sql` was generated. Neither migration has
+been applied.
+
+| Table | Generated fields |
+|---|---|
+| `jwks` | Signing key identity, public/private keys, creation and expiry, algorithm, and curve |
+| `oauth_access_token` | Token, client/session/user links, authorization and refresh references, resources, claims, scopes, expiry, revocation, and confirmation |
+| `oauth_client` | Client identity/secret, registration metadata, redirects, scopes, token settings, DPoP state, and ownership metadata |
+| `oauth_client_assertion` | Assertion identifier and expiry |
+| `oauth_client_resource` | Client/resource relationship, metadata, and creation time |
+| `oauth_consent` | Client/user references, resources, requested claims, scopes, and timestamps |
+| `oauth_refresh_token` | Token/client/session/user references, authorization state, expiry, rotation/replay data, confirmation, and scopes |
+| `oauth_resource` | Resource identity, token policy, signing configuration, scopes, DPoP and disabled state, timestamps, and metadata |
+
+The migration also adds the OAuth foreign keys and client, user, session, token,
+and resource indexes.
 
 ## MCP Auth Plugin (authorization)
 
-The MCP plugin has not been configured or schema-inspected in this project.
+The MCP plugin was configured with JWT and a non-routable protected resource.
+Schema generation failed before output because the Drizzle adapter requires the
+OAuth Provider models already present in the schema object, including
+`oauthResource`. Retrying without the adapter schema produced the same error.
+The temporary MCP configuration was removed and no migration was generated or
+applied. Better Auth documents that MCP uses the OAuth Provider schema shown
+above.
 
 ## Device Authorization Plugin (OAuth and OIDC providers)
 
-The Device Authorization plugin has not been configured or schema-inspected in
-this project.
+The Device Authorization plugin generated `drizzle/0027_thin_loki.sql`, then
+was removed. The rollback migration `drizzle/0028_clean_warstar.sql` was
+generated. Neither migration has been applied.
+
+| Table | Generated fields |
+|---|---|
+| `device_code` | `id`, device/user codes, optional user ID, expiry, status, polling state, client ID, and scope |
+
+The migration adds unique indexes on the device and user codes.
 
 ## Captcha Plugin (utility)
 
