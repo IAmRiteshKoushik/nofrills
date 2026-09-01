@@ -1,0 +1,83 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1788283641390,
+      "tag": "0000_organic_leopardon",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788294774156,
+      "tag": "0001_big_doctor_octopus",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788297506389,
+      "tag": "0002_aspiring_ben_parker",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788297695739,
+      "tag": "0003_natural_nehzno",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788297852868,
+      "tag": "0004_yielding_vivisector",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788298169331,
+      "tag": "0005_lazy_lorna_dane",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1788298205619,
+      "tag": "0006_great_tag",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1788298300439,
+      "tag": "0007_white_the_hand",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1788298327987,
+      "tag": "0008_lush_jigsaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1788298350103,
+      "tag": "0009_glossy_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1788298364637,
+      "tag": "0010_superb_human_fly",
+      "breakpoints": true
+    }
+  ]
+}
