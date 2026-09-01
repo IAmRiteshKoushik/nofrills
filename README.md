@@ -7,6 +7,5 @@ work with.
 
 Catalog:
 
-- [Transaction Logger with Vector + ClickHouse](./txn-logger-vector-clickhouse)
-- [Postgres CDC From Scratch]()
-- [Schemaless Datastore on Postgres](./schemaless-pg/)
+### 1. Better Auth (plugins)
+
