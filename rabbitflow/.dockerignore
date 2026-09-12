@@ -1,0 +1,6 @@
+.git
+artifacts
+README.md
+*_test.go
+bin
+rabbitflow

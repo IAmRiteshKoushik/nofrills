@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rabbitflow · Live event lab</title>
+  <link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head>
+<body>
+  <header><a class="brand" href="/" aria-label="Rabbitflow home"><span class="brand-icon">↝</span> rabbitflow<span class="tag">LAB</span></a><div class="connection"><span id="connection-dot" class="dot"></span><span id="connection">Connecting</span></div></header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">GO + RABBITMQ / LIVE EXPERIMENT</p><h1>A little pressure.<br>A few more workers.</h1><p class="subhead">Send events. Watch the queue grow. See goroutines join in.</p></div><div class="intro-note"><span class="mini-line"></span>Real messages. Bounded concurrency.<br>One worker, one event at a time.</div></div>
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+    <section class="pipeline" aria-label="Event pipeline">
+      <div><span class="stage-number">01</span><div><small>PRODUCER</small><strong id="producer-stage">Paused</strong></div><span class="stage-icon">↗</span></div><span class="arrow">→</span>
+      <div><span class="stage-number">02</span><div><small>RABBITMQ</small><strong id="queue-stage">Waiting for broker</strong></div><span class="queue-icon">▤</span></div><span class="arrow">→</span>
+      <div><span class="stage-number">03</span><div><small>WORKER POOL</small><strong id="pool-stage">Starting</strong></div><span class="stage-icon">⠿</span></div>
+    </section>
+    <section class="metrics" aria-label="Live metrics">
+      <article><span class="metric-label">Queue depth <span class="metric-dot orange"></span></span><div class="metric-value" id="ready">0</div><small>Ready in RabbitMQ</small></article>
+      <article><span class="metric-label">Live workers <span class="metric-dot green"></span></span><div class="metric-value"><span id="worker-count">0</span><span class="metric-suffix" id="worker-limit">/ 16</span></div><small id="busy-label">0 busy · 0 idle</small></article>
+      <article><span class="metric-label">Throughput</span><div class="metric-value"><span id="throughput">0</span><span class="metric-suffix">/s</span></div><small>Completed events per second</small></article>
+      <article><span class="metric-label">Completed</span><div class="metric-value" id="completed">0</div><small id="published-label">0 confirmed publishes this run</small></article>
+    </section>
+    <div class="workspace">
+      <div class="main-column">
+        <section class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">THE BIG PICTURE</p><h2>Pressure & response</h2></div><div class="legend"><span><i class="orange"></i>Queue</span><span><i class="green"></i>Workers</span></div></div>
+          <div class="chart-wrap"><canvas id="chart" role="img" aria-label="Last 60 seconds of queue depth and live worker count"></canvas><div id="chart-empty">Send a burst to get things moving.</div></div><div class="chart-footer"><span>60 seconds ago</span><span>Separate scales · queue left / workers right</span><span>Now</span></div>
+        </section>
+        <section class="panel"><div class="panel-heading"><div><p class="eyebrow">CONCURRENT HANDLERS</p><h2>Inside the pool <span class="count-tag" id="pool-badge">0 workers</span></h2></div><div class="legend"><span><i class="green"></i>Busy</span><span><i class="idle"></i>Idle</span></div></div><div id="workers" class="worker-grid"><p class="empty">Workers will appear when RabbitMQ connects.</p></div><p class="panel-footnote">Each tile is one worker goroutine. Retiring workers finish their current event.</p></section>
+        <section class="panel"><div class="panel-heading"><div><p class="eyebrow">WHAT JUST HAPPENED</p><h2>Activity</h2></div><span class="muted">Latest 80 decisions</span></div><div id="activity" class="activity"><p class="empty">Waiting for the first connection.</p></div></section>
+      </div>
+      <aside>
+        <section class="panel controls"><div class="panel-heading"><div><p class="eyebrow">MAKE SOME TRAFFIC</p><h2>Producer</h2></div><span class="pill" id="producer-pill">PAUSED</span></div>
+          <form id="producer-form"><label for="rate">Publish rate <span><output id="rate-value">10</output> events/s</span></label><input type="range" id="rate" min="1" max="200" value="10">
+          <label for="work-ms">Work per event <span>ms</span></label><input type="number" id="work-ms" min="50" max="5000" step="50" value="800" required><p class="hint">Simulated work. Longer events keep workers busy.</p>
+          <button class="button primary" id="toggle-producer" type="submit">Start producer <span>↗</span></button><button class="button subtle" id="apply-producer" type="button">Apply rate & duration</button></form>
+          <div class="divider"></div><div class="burst-title"><h3>Or send a burst</h3><span class="muted">One-time traffic</span></div><form id="burst-form"><div class="burst-row"><label class="sr-only" for="burst-count">Burst event count</label><input type="number" id="burst-count" min="1" max="1000" value="120" required><button class="button burst" id="send-burst" type="submit">Send burst ↗</button></div></form><p class="hint" id="burst-hint">Try 120 events and watch the pool expand.</p>
+        </section>
+        <section class="panel controls"><div class="panel-heading"><div><p class="eyebrow">SET THE BOUNDARIES</p><h2>Autoscaling</h2></div><span class="auto-tag">AUTO</span></div><form id="pool-form"><div class="two-inputs"><div><label for="min-workers">Min workers</label><input id="min-workers" type="number" min="1" max="64" value="2" required></div><div><label for="max-workers">Max workers</label><input id="max-workers" type="number" min="1" max="64" value="16" required></div></div><label for="backlog">Events per worker</label><input id="backlog" type="number" min="1" max="100" value="8" required><p class="hint">Target = ceil((ready + busy) / this value), clamped to the worker bounds.</p><label for="cooldown">Scale-down cooldown <span>seconds</span></label><input id="cooldown" type="number" min="2" max="60" value="8" required><button class="button secondary" type="submit">Apply pool settings</button></form><p class="hint last">Growth is checked every 500 ms. Lower demand must persist through the cooldown before workers retire.</p></section>
+        <div class="how-it-works"><span>↳</span><p>Events travel through a durable RabbitMQ queue. Workers acknowledge after processing. The pool scales; the upper bound holds.</p></div>
+      </aside>
+    </div>
+    <footer><span>RABBITFLOW <span class="footer-divider">/</span> A Go concurrency experiment</span><span id="sample-time">Waiting for first sample</span></footer>
+  </main>
+</body>
+</html>
