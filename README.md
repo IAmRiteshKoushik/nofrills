@@ -8,4 +8,6 @@ work with.
 Catalog:
 
 ### 1. Better Auth (plugins)
+### 2. Avatar Ring
+### 3. Orval
 
