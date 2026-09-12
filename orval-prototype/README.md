@@ -58,6 +58,57 @@ pnpm generate
 
 The hand-written TODO screen at [src/routes/todos.tsx](src/routes/todos.tsx) imports those generated hooks and types. Do not edit files beneath `src/api/generated` by hand.
 
+## One backend, web and mobile clients
+
+One OpenAPI document can serve separate web and mobile repositories. Tag each operation by its domain and intended client, then have each repository run Orval with a tag filter. Keep the domain tag first when using `tags-split`, because Orval uses the first tag for the generated file grouping.
+
+```yaml
+paths:
+  /todos:
+    get:
+      tags: [todos, web]
+      operationId: listTodos
+  /mobile/sync:
+    get:
+      tags: [sync, mobile]
+      operationId: getMobileSync
+  /profile:
+    get:
+      tags: [profile, web, mobile]
+      operationId: getProfile
+```
+
+In the web repository, generate only `web` operations:
+
+```ts
+import { defineConfig } from 'orval'
+
+export default defineConfig({
+  webApi: {
+    input: {
+      target: './openapi.yaml',
+      filters: { tags: ['web'] },
+    },
+    output: {
+      mode: 'tags-split',
+      target: './src/api/generated/api.ts',
+      schemas: './src/api/generated/models',
+      client: 'react-query',
+      httpClient: 'axios',
+    },
+  },
+})
+```
+
+The mobile repository uses the same shape with `filters: { tags: ['mobile'] }`. Orval includes the schemas those selected operations reference, so each client avoids unrelated endpoint code and models. Tag filtering affects generation only. The backend must still enforce authorization and client access rules.
+
+Useful project locations:
+
+- [OpenAPI contract](openapi.yaml)
+- [Current Orval configuration](orval.config.ts)
+- [Generated API client folder](src/api/generated/)
+- [Hand-written TODO route](src/routes/todos.tsx)
+
 ## Verification
 
 This environment has `pnpm` 11.21.0 and Go 1.26.1 at `/usr/local/go/bin/go`. Use `PATH=/usr/local/go/bin:$PATH go test ./...` if Go is not already on your `PATH`.
