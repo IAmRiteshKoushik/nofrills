@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: Todo API
+  version: 1.0.0
+  description: A deliberately small in-memory TODO API for an Orval prototype. It has no authentication.
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
+servers:
+  - url: http://localhost:8080
+security: []
+paths:
+  /health:
+    get:
+      summary: Check whether the API is running.
+      operationId: getHealth
+      responses:
+        '200':
+          description: API is available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /todos:
+    get:
+      summary: List TODOs.
+      operationId: listTodos
+      responses:
+        '200':
+          description: All TODOs, ordered by creation ID.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+    post:
+      summary: Create a TODO.
+      operationId: createTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTodoInput'
+      responses:
+        '201':
+          description: Created TODO.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /todos/{id}:
+    parameters:
+      - $ref: '#/components/parameters/TodoID'
+    get:
+      summary: Get a TODO by ID.
+      operationId: getTodo
+      responses:
+        '200':
+          description: A TODO.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Update selected TODO fields.
+      operationId: updateTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTodoInput'
+      responses:
+        '200':
+          description: Updated TODO.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      summary: Delete a TODO.
+      operationId: deleteTodo
+      responses:
+        '204':
+          description: TODO deleted.
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    TodoID:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      example: '1'
+  responses:
+    BadRequest:
+      description: The request body is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested TODO does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Todo:
+      type: object
+      required: [id, title, details, completed, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          example: '1'
+        title:
+          type: string
+          example: Buy coffee
+        details:
+          type: string
+          example: Pick up beans for the office.
+        completed:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CreateTodoInput:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        details:
+          type: string
+    UpdateTodoInput:
+      type: object
+      minProperties: 1
+      properties:
+        title:
+          type: string
+          minLength: 1
+        details:
+          type: string
+        completed:
+          type: boolean
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    Health:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          example: ok
