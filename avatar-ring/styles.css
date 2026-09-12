@@ -1,0 +1,46 @@
+:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #252925; background: #f5f4ef; color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 1056px; margin: auto; padding: 58px 28px 28px; }
+.eyebrow { margin: 0 0 20px; font-size: 10px; font-weight: 650; letter-spacing: .16em; color: #666c62; }
+h1 { font-size: clamp(36px, 5vw, 56px); line-height: 1.08; font-weight: 500; letter-spacing: -.045em; margin: 0 0 22px; }
+.intro { color: #696d64; font-size: 15px; line-height: 1.65; margin: 0 0 38px; }
+.studio { border: 1px solid #dddfd4; border-radius: 22px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; background: #fdfdf9; }
+.preview { --surface: #eaece3; --ring-width: 6px; --ring-background: #c4c9bb; background: var(--surface); color: #252925; padding: 32px; min-height: 465px; display: flex; align-items: center; flex-direction: column; justify-content: space-between; }
+.preview.dark { --surface: #20251f; color: #f0f2e9; }
+.preview.dark .eyebrow, .preview.dark #status { color: #bcc4b6; }
+.avatar-ring { width: 222px; height: 222px; padding: var(--ring-width); border-radius: 50%; background: var(--ring-background); margin: 20px 0; }
+.avatar-gap { width: 100%; height: 100%; border-radius: 50%; padding: 5px; background: var(--surface); position: relative; }
+#avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: center; background: var(--surface); }
+#placeholder { position: absolute; inset: 0; display: grid; place-items: center; font-size: 64px; color: #88927c; }
+#placeholder[hidden] { display: none; }
+#status { margin: 4px 0 20px; font-size: 12px; line-height: 1.5; text-align: center; color: #656d5d; max-width: 310px; }
+#status[data-error="true"] { color: #a2392c; }
+.preview.dark #status[data-error="true"] { color: #ffb0a3; }
+.theme-switch { display: flex; gap: 3px; padding: 4px; background: #0000000a; border-radius: 22px; }
+button, .upload-button { font: inherit; font-size: 12px; cursor: pointer; }
+.theme-switch button { border: 0; border-radius: 18px; background: transparent; padding: 8px 19px; color: inherit; }
+.theme-switch button[aria-pressed="true"] { color: #252925; background: #fdfdf9; box-shadow: 0 1px 4px #00000012; }
+.controls { padding: 35px; }
+h2 { margin: 0 0 12px; font-size: 23px; font-weight: 500; letter-spacing: -.035em; }
+.detail { font-size: 13px; color: #707469; line-height: 1.65; margin: 0; }
+.palette { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 25px 0 28px; min-height: 75px; }
+.swatch { min-width: 0; }
+.swatch-color { height: 48px; border-radius: 8px; border: 1px solid #00000012; }
+.swatch code { display: block; font-size: 11px; color: #62685b; margin-top: 9px; }
+.slider-label { display: flex; justify-content: space-between; font-size: 12px; }
+output { color: #6c7462; font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; margin: 14px 0 24px; accent-color: #4f6442; }
+.actions { display: flex; flex-direction: column; gap: 9px; }
+.upload-button { display: block; text-align: center; background: #33472d; color: #fff; padding: 13px; border-radius: 9px; position: relative; }
+.upload-button:hover { background: #425b39; }
+.upload-button input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible, .upload-button:focus-within { outline: 3px solid #8d9e5b; outline-offset: 4px; }
+#reset { border: 1px solid #dce0d4; background: transparent; color: #414b3a; border-radius: 9px; padding: 11px; }
+#reset:hover { background: #eff1e9; }
+.fine-print { font-size: 11px; color: #757b6c; text-align: center; margin: 12px 0 20px; }
+details { border-top: 1px solid #e4e6dd; padding-top: 16px; font-size: 12px; color: #646e5c; line-height: 1.6; }
+summary { cursor: pointer; }
+footer { display: flex; justify-content: space-between; gap: 16px; font-size: 10px; letter-spacing: .08em; color: #73786c; padding: 25px 0; }
+footer a { color: inherit; letter-spacing: 0; }
+@media (max-width: 650px) { main { padding: 32px 18px 14px; } .studio { grid-template-columns: 1fr; } .preview { min-height: 390px; padding: 26px; } .controls { padding: 26px; } footer { flex-wrap: wrap; font-size: 9px; } }

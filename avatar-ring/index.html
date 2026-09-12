@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Avatar ring · Color study</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">COLOR STUDY / 001</p>
+      <h1>A little color.<br>A little more you.</h1>
+      <p class="intro">A profile ring made from the colors in your picture.<br>Computed here, in your browser.</p>
+    </header>
+    <section class="studio" aria-label="Avatar ring preview">
+      <div class="preview">
+        <span class="eyebrow">LIVE PREVIEW</span>
+        <div class="avatar-ring" id="ring"><div class="avatar-gap"><img id="avatar" alt="Profile picture preview" hidden><span id="placeholder" aria-hidden="true">◎</span></div></div>
+        <p id="status" role="status" aria-live="polite">Loading your avatar…</p>
+        <div class="theme-switch" role="group" aria-label="Preview background">
+          <button type="button" id="light" aria-pressed="true">Light</button>
+          <button type="button" id="dark" aria-pressed="false">Dark</button>
+        </div>
+      </div>
+      <div class="controls">
+        <div>
+          <p class="eyebrow">YOUR PALETTE</p>
+          <h2>From picture to gradient.</h2>
+          <p class="detail">Three representative colors, sampled from the visible circle.</p>
+          <div id="palette" class="palette" aria-label="Extracted colors"><p class="detail">Your colors will appear here.</p></div>
+        </div>
+        <label class="slider-label" for="width">Ring width <output id="width-value" for="width">6 px</output></label>
+        <input id="width" type="range" min="2" max="14" value="6">
+        <div class="actions">
+          <label class="upload-button" for="upload">Try your own picture<input id="upload" type="file" accept="image/*"></label>
+          <button id="reset" type="button">Use GitHub avatar</button>
+        </div>
+        <p class="fine-print">Your selected file stays on this device.</p>
+        <details>
+          <summary>How it works</summary>
+          <p>The image is center-cropped to a circle and sampled at 64 × 64 pixels. Similar colors are clustered, then three distinct representatives become the gradient. A one-color picture repeats that color.</p>
+          <p id="timing">Waiting for an image.</p>
+        </details>
+      </div>
+    </section>
+    <footer><span>ONE PICTURE. ITS OWN PALETTE.</span><a href="https://avatars.githubusercontent.com/u/72215925?v=4" target="_blank" rel="noreferrer">Original GitHub avatar ↗</a></footer>
+  </main>
+</body>
+</html>
